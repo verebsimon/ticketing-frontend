@@ -9,7 +9,16 @@ export default {
       previewImage: null,
       selectedImageFile: null,
       myTickets: [],
-      isUploadingImage: false
+      isUploadingImage: false,
+
+      isEditingCredentials: false,
+      isSavingCredentials: false,
+      accountForm: {
+        username: "",
+        password: "",
+        confirmPassword: ""
+      },
+      displayedUsername: ""
     };
   },
 
@@ -19,6 +28,8 @@ export default {
   },
 
   async created() {
+    this.displayedUsername = this.session.username;
+    this.resetAccountForm();
     await this.getMyTickets();
   },
 
@@ -29,6 +40,76 @@ export default {
   },
 
   methods: {
+    resetAccountForm() {
+      this.accountForm = {
+        username: this.displayedUsername || this.session.username || "",
+        password: "",
+        confirmPassword: ""
+      };
+    },
+
+    startEditingCredentials() {
+      this.resetAccountForm();
+      this.isEditingCredentials = true;
+    },
+
+    cancelEditingCredentials() {
+      this.resetAccountForm();
+      this.isEditingCredentials = false;
+    },
+
+    async saveCredentials() {
+      if (!this.accountForm.username.trim()) {
+        this.showNotification("Username cannot be empty", "warning");
+        return;
+      }
+
+      if (
+        this.accountForm.password &&
+        this.accountForm.password !== this.accountForm.confirmPassword
+      ) {
+        this.showNotification("Passwords do not match", "warning");
+        return;
+      }
+
+      this.isSavingCredentials = true;
+
+      try {
+        const payload = {
+          username: this.accountForm.username.trim()
+        };
+
+        if (this.accountForm.password.trim()) {
+          payload.password = this.accountForm.password;
+        }
+
+        const response = await fetch("/api/accounts/credentials", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            token: this.session.token
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          this.displayedUsername = this.accountForm.username.trim();
+          this.isEditingCredentials = false;
+          this.resetAccountForm();
+          this.showNotification("Credentials updated successfully", "success");
+        } else if (response.status === 401) {
+          this.$emit("logout");
+        } else {
+          this.showNotification("Failed to update credentials", "danger");
+        }
+      } catch (error) {
+        console.error(error);
+        this.showNotification("Network error while updating credentials", "danger");
+      } finally {
+        this.isSavingCredentials = false;
+      }
+    },
+
     async getMyTickets() {
       try {
         const response = await fetch("/api/tickets/my-tickets", {
@@ -113,7 +194,7 @@ export default {
 
     countTicketsByStatus(status) {
       return this.myTickets.filter(
-          (ticket) => ticket.metadata && ticket.metadata.status === status
+        (ticket) => ticket.metadata && ticket.metadata.status === status
       ).length;
     }
   }
@@ -133,18 +214,18 @@ export default {
         <div class="card shadow-sm p-4 text-center">
           <label class="avatar-upload mx-auto">
             <input
-                type="file"
-                accept="image/*"
-                hidden
-                @change="onProfileImageChange"
+              type="file"
+              accept="image/*"
+              hidden
+              @change="onProfileImageChange"
             />
 
             <div class="avatar-wrapper">
               <img
-                  v-if="previewImage"
-                  :src="previewImage"
-                  alt="Profile picture"
-                  class="avatar-image"
+                v-if="previewImage"
+                :src="previewImage"
+                alt="Profile picture"
+                class="avatar-image"
               />
 
               <div v-else class="avatar-placeholder">
@@ -158,14 +239,14 @@ export default {
             </div>
           </label>
 
-          <h4 class="mt-3 mb-1">{{ session.username }}</h4>
+          <h4 class="mt-3 mb-1">{{ displayedUsername }}</h4>
           <span class="badge bg-secondary text-uppercase">{{ session.role }}</span>
 
           <button
-              v-if="selectedImageFile"
-              class="btn btn-primary mt-3"
-              :disabled="isUploadingImage"
-              @click="uploadProfileImage"
+            v-if="selectedImageFile"
+            class="btn btn-primary mt-3"
+            :disabled="isUploadingImage"
+            @click="uploadProfileImage"
           >
             {{ isUploadingImage ? "Uploading..." : "Save Profile Picture" }}
           </button>
@@ -174,11 +255,56 @@ export default {
 
       <div class="col-md-8">
         <div class="card shadow-sm p-4 mb-4">
-          <h4 class="mb-3">Account Information</h4>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Account Information</h4>
 
-          <div class="row mb-2">
+            <button
+              v-if="!isEditingCredentials"
+              class="btn btn-outline-primary btn-sm"
+              @click="startEditingCredentials"
+            >
+              Edit
+            </button>
+          </div>
+
+          <div class="row mb-3">
             <div class="col-sm-4"><strong>Username:</strong></div>
-            <div class="col-sm-8">{{ session.username }}</div>
+            <div class="col-sm-8">
+              <span v-if="!isEditingCredentials">{{ displayedUsername }}</span>
+              <input
+                v-else
+                v-model="accountForm.username"
+                type="text"
+                class="form-control"
+                placeholder="Enter username"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-sm-4"><strong>New Password:</strong></div>
+            <div class="col-sm-8">
+              <span v-if="!isEditingCredentials">********</span>
+              <input
+                v-else
+                v-model="accountForm.password"
+                type="password"
+                class="form-control"
+                placeholder="Enter new password"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3" v-if="isEditingCredentials">
+            <div class="col-sm-4"><strong>Confirm Password:</strong></div>
+            <div class="col-sm-8">
+              <input
+                v-model="accountForm.confirmPassword"
+                type="password"
+                class="form-control"
+                placeholder="Confirm new password"
+              />
+            </div>
           </div>
 
           <div class="row mb-2">
@@ -186,9 +312,27 @@ export default {
             <div class="col-sm-8 text-capitalize">{{ session.role }}</div>
           </div>
 
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-sm-4"><strong>Status:</strong></div>
             <div class="col-sm-8">Active</div>
+          </div>
+
+          <div v-if="isEditingCredentials" class="d-flex gap-2 flex-wrap mt-3">
+            <button
+              class="btn btn-success"
+              :disabled="isSavingCredentials"
+              @click="saveCredentials"
+            >
+              {{ isSavingCredentials ? "Saving..." : "Save" }}
+            </button>
+
+            <button
+              class="btn btn-secondary"
+              :disabled="isSavingCredentials"
+              @click="cancelEditingCredentials"
+            >
+              Cancel
+            </button>
           </div>
         </div>
 
