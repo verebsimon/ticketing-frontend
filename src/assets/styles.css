@@ -1,0 +1,220 @@
+.boxGreen {
+    outline: 2px solid #11AF91;
+    /*this is the actual eMagiz green, worth keeping in mind */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #11af922a;
+}
+
+.boxGreen:hover {
+    background-color: #0e89663e;
+}
+
+.navbarCSS {
+    position: fixed;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: #11af92;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.chip {
+    outline: 2px solid rgba(131, 117, 117, 0.397);
+    border-radius: 4px;
+    margin: 5px;
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 9999px;
+    padding: 4px 12px;
+    display: inline-block;
+
+}
+
+.whiteFrame {
+    outline: 2px solid rgba(131, 117, 117, 0.397);
+    border-radius: 4px;
+    margin: 5px;
+
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 4px 12px;
+    display: inline-block;
+
+}
+
+.greenFrame {
+
+    border-radius: 4px;
+    margin: 5px;
+
+    padding: 5px;
+    background-color: #11AF91;
+    border-radius: 15px;
+    padding: 4px 12px;
+    display: inline-block;
+
+}
+
+.chip.Status {
+
+    background-color: #ef682a2f;
+}
+
+
+.chip.Type {
+    background-color: #ef682a2f;
+    color: white !important;
+    outline: 1.5px dashed rgba(133, 119, 119, 0.656);
+}
+
+.chip.Type.incident {
+    background-color: #b56a0e80;
+
+}
+
+.chip.Type.RFC {
+    background-color: #0e0a9595;
+}
+
+.chip.Type.other {
+    background-color: gray;
+}
+
+.chip.Status.open {
+    background-color: #2a89ef2f !important;
+    outline: solid 2px #2a89ef70
+}
+
+.chip.Status.inProgress {
+    background-color: #a02aef2f !important;
+    outline: solid 2px #a02aef59
+}
+
+.chip.Status.rejected {
+    background-color: #d2292936 !important;
+    outline: solid 2px #d2292963
+}
+
+.chip.Status.resolved {
+    background-color: #11af9241 !important;
+    outline: solid 2px #11af9283 !important;
+
+}
+
+.internalFrame {
+    border: 5px dashed #ccc;
+}
+
+.basicFrame {
+
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #a4a4a42a;
+
+}
+
+.basicFrame.dashed {
+    border: 2px dashed #ccc;
+    background-color: #ffffff15;
+}
+
+.chipGeneric {
+    border-radius: 4px;
+    margin: 0px;
+    padding: 5px;
+    background-color: #6868683b !important;
+    border-radius: 9999px;
+
+    padding: 4px 12px;
+    display: inline-block;
+
+}
+
+.ticket-title {
+    display: inline-block;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.btn-navbar {
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90px;
+    width: 90px;
+    background-color: rgba(255, 0, 0, 0);
+    color: white;
+    justify-content: center;
+
+}
+
+.outlineGreen {
+    margin: 40px;
+    padding: 30px;
+    outline: 2px solid;
+    outline-color: #11AF91;
+    background-color: white;
+
+}
+
+.btn-primary {
+    background-color: #11AF91;
+    margin: 0.3%;
+    border-color: #0e8966;
+}
+
+.orange-background {
+
+    border-radius: 20px;
+    padding: 12px;
+    color: #EF692A;
+
+}
+
+.btn-orange {
+    background-color: #EF692A;
+    margin: 0.3%;
+    border-color: #cd501f;
+    color: white;
+}
+
+.btn-orange:hover {
+    background-color: #cd501f;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0e8966;
+}
+
+.btn-navbar:hover {
+    background-color: #0e89661b;
+}
+
+thead th {
+    background-color: #11AF91;
+    color: white;
+}
+
+.navbar-bottom {
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+.sorting-field {
+    cursor: pointer;
+    user-select: none;
+}

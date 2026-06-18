@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Overview</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>All tickets</h2>
+       
+        <div class="button" onclick="openPopup('assignConsultantPopup')">Ticket 1: Assign Consultant</div>
+        <div class="button" onclick="openPopup('assignConsultantPopup')">Ticket 2: Assign Consultant</div>
+        <div class="button" onclick="openPopup('assignConsultantPopup')">Ticket 3: Assign Consultant</div>
+        <!-- this is really impractical but bear with me until i figure out how to make a container 
+         for each ticket, then ill be unstoppable-but for now it is what it is-->
+        <div class="addTicketButton" onclick="openPopup('addTicketPopup')">Add New Ticket</div>
+        <div class="popup" id="addTicketPopup">
+            <h4>Enter title</h4>
+            <h4>Enter description</h4>
+            <div class="addTicketButton" onclick="closePopup('addTicketPopup')">add</div>
+        </div>
+
+    <div class="popup" id="assignConsultantPopup">
+        <div class="button" onclick="closePopup('assignConsultantPopup')">hassan</div>
+        <div class="button" onclick="closePopup('assignConsultantPopup')">šimon</div>
+        <div class="button" onclick="closePopup('assignConsultantPopup')">sebastian</div>
+    </div>
+    <script>
+        function openPopup(id){
+            document.getElementById(id).classList.add("open-popup");
+        }
+        function closePopup(id){
+            document.getElementById(id).classList.remove("open-popup");
+        }
+    </script>
+</body>
+</html>
